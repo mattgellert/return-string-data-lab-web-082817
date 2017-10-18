@@ -9,7 +9,8 @@ products = ["tv", "vcr", "macbook", "macbook air", "mouse", "chair", "desk", "la
 
 10.times do
   products = ["tv", "vcr", "macbook", "macbook air", "mouse", "chair", "desk", "lamp", "water bottle"]
-  Product.create(:name => products.sample, :price => Faker::Number.between(1,1500))
+  description = "this is a description for the various products available in this store. If you'd like to see the entire description just click on the truncated version!"
+  Product.create(:name => products.sample, :price => Faker::Number.between(1,1500), :description => description, :inventory => Faker::Number.between(1,20))
 end
 5.times do
   Customer.create(:name => Faker::Name.name)
@@ -22,4 +23,3 @@ end
   order = Order.create(:customer_id => Customer.all.collect(&:id).sample, :invoice_id => Invoice.all.collect(&:id).sample)
   order.products << Product.find(Product.all.collect(&:id).sample)
 end
-

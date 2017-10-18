@@ -1,1 +1,34 @@
+<h2>Products</h2>
+<% @products.each do |product| %>
+  <h3><%=product.name%></h3>
+  <div id='body-<%=product.id%>'><p><%=truncate product.description%></p></div>
+  <button class='js-more', data-id='<%=product.id%>'>More Info</button>
+<% end %>
 
+<script type="text/javascript" charset="utf-8">
+  $('.js-more').on('click', function () {
+    let id = $(this).data('id')
+    let description = $('#body-'+id)[0].innerText
+    if ($('#body-'+id+' p')[0].innerText.length === 30) {
+
+      $.get(id + '/description', function(data) {
+        $('#body-'+id+' p').text(data)
+      })
+
+      $.get(id + '/inventory', function(data) {
+        if (data === 'true') {
+          $('#body-'+id)[0].innerHTML += '<p>Inventory: Available</p>'
+        } else {
+          $('#body-'+id)[0].innerHTML += '<p>Inventory: Sold Out</p>'
+        }
+
+      })
+
+      $(`button[data-id='${id}']`)[0].innerText = 'Less Info'
+    } else {
+      $('#body-1 p')[1].remove()
+      $('#body-'+id+' p')[0].innerText = description.slice(0,27) + '...'
+      $(`button[data-id='${id}']`)[0].innerText = 'More Info'
+    }
+  })
+</script>
